@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -68,16 +67,17 @@ public class LoginResource {
 
 		Login l = (Login) jason.fromJson(content, Login.class);
 
+		
 		if (new LoginController().inserirLogin(l)) {
 			return Response.status(200).entity("200").build();
 
 		} else {
 			return Response.status(500).entity("500").build();
 		}
-
+		
 	}
 
-	@DELETE
+	@POST
 	@Path("/remover")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)

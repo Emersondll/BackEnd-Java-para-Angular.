@@ -3,7 +3,6 @@ package com.meuprincipe.resource;
 import java.util.ArrayList;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -58,7 +57,7 @@ public class MarcaResource {
 
 	}
 
-	@DELETE
+	@POST
 	@Path("/remover")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)

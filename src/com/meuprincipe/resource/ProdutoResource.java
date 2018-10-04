@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -67,7 +66,7 @@ public class ProdutoResource {
 
 	}
 
-	@DELETE
+	@POST
 	@Path("/remover")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -98,9 +97,9 @@ public class ProdutoResource {
 			@HeaderParam(value = "novoProdutoCodigo") String novoProdutoCodigo) throws SQLException {
 
 		String temp = "{\"produtoLicenciado\": \"" + novoProdutoLicenciado + "\", \"produtoNome\": \"" + novoprodutoNome
-				+ "\", \"produtoQuantidade\": \"" + novoProdutoQuantidade + "\", \"produtoValor\": \"" + novoProdutoValor
-				+ "\", \"produtoMarca\": \"" + novoProdutoMarca + "\", \"produtoCodigo\": \"" + novoProdutoCodigo
-				+ "\"}";
+				+ "\", \"produtoQuantidade\": \"" + novoProdutoQuantidade + "\", \"produtoValor\": \""
+				+ novoProdutoValor + "\", \"produtoMarca\": \"" + novoProdutoMarca + "\", \"produtoCodigo\": \""
+				+ novoProdutoCodigo + "\"}";
 
 		Gson jason = new Gson();
 
