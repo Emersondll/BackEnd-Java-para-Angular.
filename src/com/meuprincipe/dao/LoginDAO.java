@@ -35,7 +35,7 @@ public class LoginDAO extends ConnectionFactory {
 		logins = new ArrayList<Login>();
 
 		try {
-			pstmt = conexao.prepareStatement("SELECT login_id, login_nome, login_senha FROM tb_login");
+			pstmt = conexao.prepareStatement("SELECT login_id, login_nome, login_senha FROM tb_login order by login_id,login_nome");
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				Login login = new Login();
@@ -66,7 +66,7 @@ public class LoginDAO extends ConnectionFactory {
 
 		try {
 			pstmt = conexao.prepareStatement(
-					"SELECT login_id, login_nome, login_senha FROM tb_login where login_nome= ? and login_senha = ?");
+					"SELECT login_id, login_nome, login_senha FROM tb_login where login_nome= ? and login_senha = ? order by login_id,login_nome");
 			pstmt.setString(1, i.getNome());
 			pstmt.setString(2, i.getSenha());
 			rs = pstmt.executeQuery();
