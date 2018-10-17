@@ -30,7 +30,7 @@ public class ProdutoDAO extends ConnectionFactory {
 		produtos = new ArrayList<Produto>();
 
 		try {
-			pstmt = conexao.prepareStatement("SELECT * FROM tb_produto");
+			pstmt = conexao.prepareStatement("SELECT * FROM tb_produto order by produto_id");
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				Produto produto = new Produto();
@@ -41,6 +41,7 @@ public class ProdutoDAO extends ConnectionFactory {
 				produto.setProdutoLicenciado(rs.getString("produto_licenciado"));
 				produto.setProdutoMarca(rs.getString("produto_marca"));
 				produto.setProdutoCodigo(rs.getString("produto_codigo"));
+				produto.setProdutoGrade(rs.getString("produto_grade"));
 				produtos.add(produto);
 
 			}
@@ -65,8 +66,8 @@ public class ProdutoDAO extends ConnectionFactory {
 
 		try {
 			String nomeProduto = p.getProdutoNome();
-			pstmt = conexao
-					.prepareStatement("SELECT * FROM tb_produto where produto_nome like '%" + nomeProduto + "%' ;");
+			pstmt = conexao.prepareStatement(
+					"SELECT * FROM tb_produto where produto_nome like '%" + nomeProduto + "%' order by produto_id;");
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				Produto produto = new Produto();
@@ -77,6 +78,7 @@ public class ProdutoDAO extends ConnectionFactory {
 				produto.setProdutoLicenciado(rs.getString("produto_licenciado"));
 				produto.setProdutoMarca(rs.getString("produto_marca"));
 				produto.setProdutoCodigo(rs.getString("produto_codigo"));
+				produto.setProdutoGrade(rs.getString("produto_grade"));
 				produtos.add(produto);
 
 			}
@@ -96,15 +98,17 @@ public class ProdutoDAO extends ConnectionFactory {
 		conexao = criarConexao();
 
 		try {
-			pstmt = conexao.prepareStatement("INSERT INTO tb_produto(\r\n"
-					+ "            produto_nome, produto_quantidade, produto_valor, produto_codigo, produto_marca,  \r\n"
-					+ "            produto_licenciado)\r\n" + "    VALUES ( ?, ?, ?, ?, ?, ?);");
+			pstmt = conexao.prepareStatement(
+					"INSERT INTO tb_produto(produto_nome, produto_quantidade, produto_valor, \r\n"
+							+ " produto_licenciado, produto_marca, produto_codigo, produto_grade)\r\n"
+							+ " VALUES (?, ?, ?, ?, ?, ?, ?);");
 			pstmt.setString(1, p.getProdutoNome());
 			pstmt.setInt(2, p.getProdutoQuantidade());
 			pstmt.setFloat(3, p.getProdutoValor());
 			pstmt.setString(4, p.getProdutoLicenciado());
-			pstmt.setString(5, p.getProdutoCodigo());
-			pstmt.setString(6, p.getProdutoMarca());
+			pstmt.setString(5, p.getProdutoMarca());
+			pstmt.setString(6, p.getProdutoCodigo());			
+			pstmt.setString(7, p.getProdutoGrade());
 			pstmt.execute();
 
 			return true;
@@ -149,7 +153,7 @@ public class ProdutoDAO extends ConnectionFactory {
 
 			pstmt = conexao.prepareStatement(
 					"UPDATE tb_produto SET produto_nome=?, produto_quantidade=?, produto_valor=?, \r\n"
-							+ "       produto_licenciado=? , produto_marca = ? ,produto_codigo =?  where produto_nome= ? and produto_id = ? and produto_codigo= ?;");
+							+ "       produto_licenciado=? , produto_marca = ? ,produto_codigo =?  where produto_nome= ? and produto_id = ? and produto_codigo= ? and produto_grade = ? ;");
 			pstmt.setString(1, pn.getProdutoNome());
 			pstmt.setInt(2, pn.getProdutoQuantidade());
 			pstmt.setFloat(3, pn.getProdutoValor());
@@ -159,6 +163,7 @@ public class ProdutoDAO extends ConnectionFactory {
 			pstmt.setString(7, po.getProdutoNome());
 			pstmt.setInt(8, po.getProdutoId());
 			pstmt.setString(9, po.getProdutoCodigo());
+			pstmt.setString(10, po.getProdutoGrade());
 			pstmt.execute();
 
 		} catch (Exception e) {

@@ -12,6 +12,15 @@ public class Produto {
 	private String produtoLicenciado;
 	private String produtoMarca;
 	private String produtoCodigo;
+	private String produtoGrade;
+
+	public String getProdutoGrade() {
+		return produtoGrade;
+	}
+
+	public void setProdutoGrade(String produtoGrade) {
+		this.produtoGrade = produtoGrade;
+	}
 
 	public String getProdutoMarca() {
 		return produtoMarca;
@@ -73,12 +82,13 @@ public class Produto {
 	public String toString() {
 		return "Produto [produtoId=" + produtoId + ", produtoNome=" + produtoNome + ", produtoQuantidade="
 				+ produtoQuantidade + ", produtoValor=" + produtoValor + ", produtoLicenciado=" + produtoLicenciado
-				+ ", produtoMarca=" + produtoMarca + ", produtoCodigo=" + produtoCodigo + ", getProdutoMarca()="
-				+ getProdutoMarca() + ", getProdutoCodigo()=" + getProdutoCodigo() + ", getProdutoId()="
-				+ getProdutoId() + ", getProdutoNome()=" + getProdutoNome() + ", getProdutoQuantidade()="
-				+ getProdutoQuantidade() + ", getProdutoValor()=" + getProdutoValor() + ", getProdutoLicenciado()="
-				+ getProdutoLicenciado() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()="
-				+ super.toString() + "]";
+				+ ", produtoMarca=" + produtoMarca + ", produtoCodigo=" + produtoCodigo + ", produtoGrade="
+				+ produtoGrade + ", getProdutoGrade()=" + getProdutoGrade() + ", getProdutoMarca()=" + getProdutoMarca()
+				+ ", getProdutoCodigo()=" + getProdutoCodigo() + ", getProdutoId()=" + getProdutoId()
+				+ ", getProdutoNome()=" + getProdutoNome() + ", getProdutoQuantidade()=" + getProdutoQuantidade()
+				+ ", getProdutoValor()=" + getProdutoValor() + ", getProdutoLicenciado()=" + getProdutoLicenciado()
+				+ ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString()
+				+ "]";
 	}
 
 	@Override
@@ -86,6 +96,7 @@ public class Produto {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((produtoCodigo == null) ? 0 : produtoCodigo.hashCode());
+		result = prime * result + ((produtoGrade == null) ? 0 : produtoGrade.hashCode());
 		result = prime * result + ((produtoId == null) ? 0 : produtoId.hashCode());
 		result = prime * result + ((produtoLicenciado == null) ? 0 : produtoLicenciado.hashCode());
 		result = prime * result + ((produtoMarca == null) ? 0 : produtoMarca.hashCode());
@@ -108,6 +119,11 @@ public class Produto {
 			if (other.produtoCodigo != null)
 				return false;
 		} else if (!produtoCodigo.equals(other.produtoCodigo))
+			return false;
+		if (produtoGrade == null) {
+			if (other.produtoGrade != null)
+				return false;
+		} else if (!produtoGrade.equals(other.produtoGrade))
 			return false;
 		if (produtoId == null) {
 			if (other.produtoId != null)
@@ -141,5 +157,7 @@ public class Produto {
 			return false;
 		return true;
 	}
+
+
 
 }
