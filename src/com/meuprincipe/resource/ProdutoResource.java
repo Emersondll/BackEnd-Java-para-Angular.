@@ -84,28 +84,16 @@ public class ProdutoResource {
 		}
 	}
 
-	@PUT
+	@POST
 	@Path("/atualizar")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response atualizarProduto(@RequestBody String content,
-			@HeaderParam(value = "novoprodutoNome") String novoprodutoNome,
-			@HeaderParam(value = "novoProdutoQuantidade") String novoProdutoQuantidade,
-			@HeaderParam(value = "novoProdutoValor") String novoProdutoValor,
-			@HeaderParam(value = "novoProdutoLicenciado") String novoProdutoLicenciado,
-			@HeaderParam(value = "novoProdutoMarca") String novoProdutoMarca,
-			@HeaderParam(value = "novoProdutoCodigo") String novoProdutoCodigo) throws SQLException {
-
-		String temp = "{\"produtoLicenciado\": \"" + novoProdutoLicenciado + "\", \"produtoNome\": \"" + novoprodutoNome
-				+ "\", \"produtoQuantidade\": \"" + novoProdutoQuantidade + "\", \"produtoValor\": \""
-				+ novoProdutoValor + "\", \"produtoMarca\": \"" + novoProdutoMarca + "\", \"produtoCodigo\": \""
-				+ novoProdutoCodigo + "\"}";
+	public Response atualizarProduto(@RequestBody String content) throws SQLException {
 
 		Gson jason = new Gson();
 
-		Produto po = (Produto) jason.fromJson(content, Produto.class);
-		Produto pn = (Produto) jason.fromJson(temp, Produto.class);
-		if (new ProdutoController().atualizarProduto(po, pn)) {
+ 		Produto po = (Produto) jason.fromJson(content, Produto.class);
+		if (new ProdutoController().atualizarProduto(po)) {
 			return Response.status(200).entity("200").build();
 
 		} else {

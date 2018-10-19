@@ -30,18 +30,27 @@ public class ProdutoDAO extends ConnectionFactory {
 		produtos = new ArrayList<Produto>();
 
 		try {
-			pstmt = conexao.prepareStatement("SELECT * FROM tb_produto order by produto_id");
+			pstmt = conexao
+					.prepareStatement("SELECT produto_id, produto_nome, produto_quantidade, produto_valor_venda, \r\n"
+							+ "       produto_valor_custo, produto_valor_promocao, produto_licenciado, \r\n"
+							+ "       produto_marca, produto_codigo, produto_grade, produto_estacao, \r\n"
+							+ "       produto_tipo, produto_categoria\r\n" + "  FROM tb_produto order by produto_id;");
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				Produto produto = new Produto();
 				produto.setProdutoId(rs.getInt("produto_id"));
 				produto.setProdutoNome(rs.getString("produto_nome"));
 				produto.setProdutoQuantidade(rs.getInt("produto_quantidade"));
-				produto.setProdutoValor(rs.getFloat("produto_valor"));
+				produto.setProdutoValor(rs.getFloat("produto_valor_venda"));
+				produto.setProdutoCusto(rs.getFloat("produto_valor_custo"));
+				produto.setProdutoPromocao(rs.getFloat("produto_valor_promocao"));
 				produto.setProdutoLicenciado(rs.getString("produto_licenciado"));
 				produto.setProdutoMarca(rs.getString("produto_marca"));
 				produto.setProdutoCodigo(rs.getString("produto_codigo"));
 				produto.setProdutoGrade(rs.getString("produto_grade"));
+				produto.setProdutoEstacao(rs.getString("produto_estacao"));
+				produto.setProdutoTipo(rs.getString("produto_tipo"));
+				produto.setProdutoCategoria(rs.getString("produto_categoria"));
 				produtos.add(produto);
 
 			}
@@ -74,11 +83,16 @@ public class ProdutoDAO extends ConnectionFactory {
 				produto.setProdutoId(rs.getInt("produto_id"));
 				produto.setProdutoNome(rs.getString("produto_nome"));
 				produto.setProdutoQuantidade(rs.getInt("produto_quantidade"));
-				produto.setProdutoValor(rs.getFloat("produto_valor"));
+				produto.setProdutoValor(rs.getFloat("produto_valor_venda"));
+				produto.setProdutoValor(rs.getFloat("produto_valor_custo"));
+				produto.setProdutoValor(rs.getFloat("produto_valor_promocao"));
 				produto.setProdutoLicenciado(rs.getString("produto_licenciado"));
 				produto.setProdutoMarca(rs.getString("produto_marca"));
 				produto.setProdutoCodigo(rs.getString("produto_codigo"));
 				produto.setProdutoGrade(rs.getString("produto_grade"));
+				produto.setProdutoGrade(rs.getString("produto_estacao"));
+				produto.setProdutoGrade(rs.getString("produto_tipo"));
+				produto.setProdutoGrade(rs.getString("produto_categoria"));
 				produtos.add(produto);
 
 			}
@@ -98,17 +112,24 @@ public class ProdutoDAO extends ConnectionFactory {
 		conexao = criarConexao();
 
 		try {
-			pstmt = conexao.prepareStatement(
-					"INSERT INTO tb_produto(produto_nome, produto_quantidade, produto_valor, \r\n"
-							+ " produto_licenciado, produto_marca, produto_codigo, produto_grade)\r\n"
-							+ " VALUES (?, ?, ?, ?, ?, ?, ?);");
+			pstmt = conexao.prepareStatement("INSERT INTO tb_produto(\r\n"
+					+ "            produto_nome, produto_quantidade, produto_valor_venda, \r\n"
+					+ "            produto_valor_custo, produto_valor_promocao, produto_licenciado, \r\n"
+					+ "            produto_marca, produto_codigo, produto_grade, produto_estacao, \r\n"
+					+ "            produto_tipo, produto_categoria)\r\n"
+					+ "    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 			pstmt.setString(1, p.getProdutoNome());
 			pstmt.setInt(2, p.getProdutoQuantidade());
 			pstmt.setFloat(3, p.getProdutoValor());
-			pstmt.setString(4, p.getProdutoLicenciado());
-			pstmt.setString(5, p.getProdutoMarca());
-			pstmt.setString(6, p.getProdutoCodigo());			
-			pstmt.setString(7, p.getProdutoGrade());
+			pstmt.setFloat(4, p.getProdutoCusto());
+			pstmt.setFloat(5, p.getProdutoPromocao());
+			pstmt.setString(6, p.getProdutoLicenciado());
+			pstmt.setString(7, p.getProdutoMarca());
+			pstmt.setString(8, p.getProdutoCodigo());
+			pstmt.setString(9, p.getProdutoGrade());
+			pstmt.setString(10, p.getProdutoEstacao());
+			pstmt.setString(11, p.getProdutoTipo());
+			pstmt.setString(12, p.getProdutoCategoria());
 			pstmt.execute();
 
 			return true;
@@ -144,26 +165,75 @@ public class ProdutoDAO extends ConnectionFactory {
 		return false;
 	}
 
-	public boolean atualizarProduto(Produto po, Produto pn) {
+	@SuppressWarnings("resource")
+	public boolean atualizarProduto(Produto po) {
 		Connection conexao = null;
 		PreparedStatement pstmt = null;
 		conexao = criarConexao();
 		System.out.println("Conexao aberta");
-		try {
+		if ((po.getProdutoValor() == 0 && po.getProdutoPromocao() == 0) && po.getProdutoQuantidade()!=0) {
+			
+			try {
+				
+				pstmt = conexao.prepareStatement(
+						"UPDATE tb_produto SET produto_quantidade=? WHERE produto_id=? ;");
+				
+				pstmt.setInt(1, po.getProdutoQuantidade());
+				pstmt.setInt(2, po.getProdutoId());
+				pstmt.execute();
 
+			} catch (Exception e) {
+				System.out.println("Erro ao Atualizar Produto - return false");
+				e.printStackTrace();
+				return false;
+			}
+			
+		}
+		if ((po.getProdutoValor() == 0 && po.getProdutoQuantidade() == 0) && po.getProdutoPromocao()!=0) {
+			
+			try {
+				
+				pstmt = conexao.prepareStatement(
+						"UPDATE tb_produto SET produto_valor_promocao=? WHERE produto_id=? ;");
+				
+				pstmt.setFloat(1, po.getProdutoPromocao());
+				pstmt.setInt(2, po.getProdutoId());
+				pstmt.execute();
+
+			} catch (Exception e) {
+				System.out.println("Erro ao Atualizar Produto - return false");
+				e.printStackTrace();
+				return false;
+			}
+			
+		}
+		if ((po.getProdutoPromocao() == 0 && po.getProdutoQuantidade() == 0) && po.getProdutoValor()!=0) {
+			
+			try {
+				
+				pstmt = conexao.prepareStatement(
+						"UPDATE tb_produto SET produto_valor_venda=? WHERE produto_id=? ;");				
+				pstmt.setFloat(1, po.getProdutoValor());
+				pstmt.setInt(2, po.getProdutoId());
+				pstmt.execute();
+
+			} catch (Exception e) {
+				System.out.println("Erro ao Atualizar Produto - return false");
+				e.printStackTrace();
+				return false;
+			}
+			
+		}
+		if (po.getProdutoPromocao() != 0 && po.getProdutoQuantidade() != 0 && po.getProdutoValor()!=0) {
+		try {
+			
 			pstmt = conexao.prepareStatement(
-					"UPDATE tb_produto SET produto_nome=?, produto_quantidade=?, produto_valor=?, \r\n"
-							+ "       produto_licenciado=? , produto_marca = ? ,produto_codigo =?  where produto_nome= ? and produto_id = ? and produto_codigo= ? and produto_grade = ? ;");
-			pstmt.setString(1, pn.getProdutoNome());
-			pstmt.setInt(2, pn.getProdutoQuantidade());
-			pstmt.setFloat(3, pn.getProdutoValor());
-			pstmt.setString(4, pn.getProdutoLicenciado());
-			pstmt.setString(5, pn.getProdutoMarca());
-			pstmt.setString(6, pn.getProdutoCodigo());
-			pstmt.setString(7, po.getProdutoNome());
-			pstmt.setInt(8, po.getProdutoId());
-			pstmt.setString(9, po.getProdutoCodigo());
-			pstmt.setString(10, po.getProdutoGrade());
+					"UPDATE tb_produto SET produto_quantidade=?, produto_valor_venda=?, produto_valor_promocao=? WHERE produto_id=? ;");
+			
+			pstmt.setInt(1, po.getProdutoQuantidade());
+			pstmt.setFloat(2, po.getProdutoValor());
+			pstmt.setFloat(3, po.getProdutoPromocao());
+			pstmt.setInt(4, po.getProdutoId());
 			pstmt.execute();
 
 		} catch (Exception e) {
@@ -173,7 +243,7 @@ public class ProdutoDAO extends ConnectionFactory {
 		} finally {
 			fecharConexao(conexao, pstmt);
 		}
-
+		}
 		return true;
 
 	}

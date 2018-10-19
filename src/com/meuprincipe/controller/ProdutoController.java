@@ -28,8 +28,8 @@ public class ProdutoController {
 		return ProdutoDAO.getInstance().removerProduto(p);
 	}
 
-	public boolean atualizarProduto(Produto po, Produto pn) {
-		return ProdutoDAO.getInstance().atualizarProduto(po, pn);
+	public boolean atualizarProduto(Produto po) {
+		return ProdutoDAO.getInstance().atualizarProduto(po);
 	}
 
 }

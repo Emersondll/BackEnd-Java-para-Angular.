@@ -27,7 +27,7 @@ public class DelegateFilterProxy implements Filter {
 		
 	    HttpServletRequest request = (HttpServletRequest) req;
 	    HttpServletResponse response = (HttpServletResponse) res;
-	    response.setHeader("Access-Control-Allow-Headers", "Content-Type, login_nome, login_senha");
+	    response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 	    response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
 //	    response.setHeader("Access-Control-Allow-Credentials", "true");
 	    response.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, HEAD, OPTIONS");
