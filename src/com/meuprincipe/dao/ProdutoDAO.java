@@ -165,19 +165,19 @@ public class ProdutoDAO extends ConnectionFactory {
 		return false;
 	}
 
-	@SuppressWarnings("resource")
 	public boolean atualizarProduto(Produto po) {
 		Connection conexao = null;
 		PreparedStatement pstmt = null;
 		conexao = criarConexao();
 		System.out.println("Conexao aberta");
-		if ((po.getProdutoValor() == 0 && po.getProdutoPromocao() == 0) && po.getProdutoQuantidade()!=0) {
-			
+		String sql;
+
+		if (po.getProdutoQuantidade() != 99999) {
+			sql = "UPDATE tb_produto SET produto_quantidade=? WHERE produto_id=? ;";
+
 			try {
-				
-				pstmt = conexao.prepareStatement(
-						"UPDATE tb_produto SET produto_quantidade=? WHERE produto_id=? ;");
-				
+
+				pstmt = conexao.prepareStatement(sql);
 				pstmt.setInt(1, po.getProdutoQuantidade());
 				pstmt.setInt(2, po.getProdutoId());
 				pstmt.execute();
@@ -187,15 +187,12 @@ public class ProdutoDAO extends ConnectionFactory {
 				e.printStackTrace();
 				return false;
 			}
-			
-		}
-		if ((po.getProdutoValor() == 0 && po.getProdutoQuantidade() == 0) && po.getProdutoPromocao()!=0) {
-			
+
+		} else if (po.getProdutoPromocao() != 99999) {
+			sql = "UPDATE tb_produto SET produto_valor_promocao=? WHERE produto_id=? ;";
 			try {
-				
-				pstmt = conexao.prepareStatement(
-						"UPDATE tb_produto SET produto_valor_promocao=? WHERE produto_id=? ;");
-				
+
+				pstmt = conexao.prepareStatement(sql);
 				pstmt.setFloat(1, po.getProdutoPromocao());
 				pstmt.setInt(2, po.getProdutoId());
 				pstmt.execute();
@@ -205,14 +202,12 @@ public class ProdutoDAO extends ConnectionFactory {
 				e.printStackTrace();
 				return false;
 			}
-			
-		}
-		if ((po.getProdutoPromocao() == 0 && po.getProdutoQuantidade() == 0) && po.getProdutoValor()!=0) {
-			
+
+		} else if (po.getProdutoValor() != 99999) {
+			sql = "UPDATE tb_produto SET produto_valor_venda=? WHERE produto_id=? ;";
 			try {
-				
-				pstmt = conexao.prepareStatement(
-						"UPDATE tb_produto SET produto_valor_venda=? WHERE produto_id=? ;");				
+
+				pstmt = conexao.prepareStatement(sql);
 				pstmt.setFloat(1, po.getProdutoValor());
 				pstmt.setInt(2, po.getProdutoId());
 				pstmt.execute();
@@ -222,27 +217,10 @@ public class ProdutoDAO extends ConnectionFactory {
 				e.printStackTrace();
 				return false;
 			}
-			
-		}
-		if (po.getProdutoPromocao() != 0 && po.getProdutoQuantidade() != 0 && po.getProdutoValor()!=0) {
-		try {
-			
-			pstmt = conexao.prepareStatement(
-					"UPDATE tb_produto SET produto_quantidade=?, produto_valor_venda=?, produto_valor_promocao=? WHERE produto_id=? ;");
-			
-			pstmt.setInt(1, po.getProdutoQuantidade());
-			pstmt.setFloat(2, po.getProdutoValor());
-			pstmt.setFloat(3, po.getProdutoPromocao());
-			pstmt.setInt(4, po.getProdutoId());
-			pstmt.execute();
 
-		} catch (Exception e) {
-			System.out.println("Erro ao Atualizar Produto - return false");
-			e.printStackTrace();
-			return false;
-		} finally {
-			fecharConexao(conexao, pstmt);
-		}
+			finally {
+				fecharConexao(conexao, pstmt);
+			}
 		}
 		return true;
 
